@@ -2,11 +2,7 @@ module.exports = {
 	name: 'search',
 	description: 'Search Character!',
 	execute(msg, args) {
-		var search = "";
-		var type = args[0];
-		console.log(type != "anime");
-		console.log(type != "character");
-		console.log(type != "manga");
+
 		if(type != "anime" && type != "manga" && type != "character"){
 			return msg.channel.send("For type, choose between anime, manga, or character. There is no " + type + " type!");
 		}

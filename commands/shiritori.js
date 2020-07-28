@@ -1,3 +1,5 @@
+import { shiriChara } from "../object/shiriChara";
+
 const jikanjs  = require('jikanjs'); 
 const Discord = require('discord.js');
 
@@ -6,7 +8,6 @@ const timeTurn = 30000;
 
 const botID = '702016212972077116';
 const character = 'abcdefghijklmnopqrstuvwxyz';
-
 
 module.exports = {
 	name: 'shiritori',
@@ -52,7 +53,7 @@ module.exports = {
 					}
 				})
 				.catch(collected => {
-					msg.reply('you reacted with neither a thumbs up, nor a thumbs down.');
+					msg.reply('Something fishy . . .');
 				});
 			});
 		} else if (args == "anime") {
@@ -73,17 +74,22 @@ const register = (msg, user) => {
 	const participant = new Array();
 	user.forEach(value => {
 		let found = false;
+		let tmp = {};
 		value.status = 1;
 		msg.gameState[msg.guild.id].user.forEach((val,key,arr) => {
 			if (val.id == value.id) {
 				arr[key] = value;
 				found = true
-				participant.push(value.id);
+				tmp.id = value.id;
+				tmp.life = 1;
+				participant.push(tmp);
 			}
 		});
 		if (!found && value.id != botID) {
 			msg.gameState[msg.guild.id].user.push(value);
-			participant.push(value.id);
+			tmp.id = value.id;
+			tmp.life = 1;
+			participant.push(tmp);
 		}
 	});
 	msg.channel.send(`${participant.length} player is playing this game.`);
@@ -92,19 +98,17 @@ const register = (msg, user) => {
 
 const play = (msg, participant) => {
 	msg.gameState[msg.guild.id].status = 1;
-	gameStatus.totalPlayer = participant.length;
-	gameStatus.playerAlive = participant.length;
-	gameStatus.playerDie = 0;
-	inTurn.id = participant[random(participant.length)];
-	inTurn.word	= character.charAt(random(character.length, 0));
+	shuffleArray(participant);
 
-
-	msg.channel.send(`<@${inTurn.id}> will be the first player to answer`);
+	const game = new shiriChara(participant, character.charAt(random(character.length, 0)));
 	
-	// while (gameStatus.playerAlive > 1) {
-		
-	// }
-	msg.channel.send(`"${inTurn.word.toUpperCase()}" will be the first letter`);
+	msg.channel.send(`<@${game.thisTurnID()}> will be the first player to answer`);
+	msg.channel.send(`"**${game.thisTurnChara()}**" will be the first letter`);
+	
+	while (game.totalAlive() > 1) {
+		console.log(game.totalAlive());
+
+	}
 	
 	let startTime = Date.now();
 

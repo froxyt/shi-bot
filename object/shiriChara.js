@@ -1,8 +1,9 @@
+import { Game } from "./shiriGame";
+
 class GameAnimChara extends Game {
-    constructor(player, firstID, firstChara){
-        super(player);
-        this.turnID = firstID;
-        this.turnChara = firstChara;
+    constructor(player, firstChara){
+        super(player,firstChara);
+        this.bannedCharacter = new Array();
     }
 
     answer(character, nextID, nextChara){
@@ -11,7 +12,8 @@ class GameAnimChara extends Game {
     }
 
     changeTurn(nextID, nextChara){
-        this.turnID = nextID;
+        this.turn++; 
+        this.turnID = player;
         this.turnChara = nextChara;
     }
 
@@ -20,10 +22,16 @@ class GameAnimChara extends Game {
     }
 
     thisTurnChara(){
-        return this.turnChara;
+        return this.turnChara.toUpperCase();
+    }
+
+    turnCount(){
+        return this.turn;
     }
 
     banned(){
         return this.bannedCharacter;
     }
 }
+
+export default GameAnimChara;
