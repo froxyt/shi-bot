@@ -1,3 +1,6 @@
+const jikanjs  = require('jikanjs'); 
+const Discord = require('discord.js');
+
 module.exports = {
 	name: 'search',
 	description: 'Search Character!',
