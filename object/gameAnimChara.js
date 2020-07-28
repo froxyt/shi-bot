@@ -5,8 +5,9 @@ class GameAnimChara extends Game {
         this.turnChara = firstChara;
     }
 
-    answer(character){
+    answer(character, nextID, nextChara){
         this.bannedCharacter.push(character);
+        this.changeTurn(nextID, nextChara);
     }
 
     changeTurn(nextID, nextChara){
