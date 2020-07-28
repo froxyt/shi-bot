@@ -1,32 +1,30 @@
-import { Game } from "./shiriGame";
+const shiriGame = require('./shiriGame');
 
-class GameAnimChara extends Game {
+class shiriChara extends shiriGame {
     constructor(player, firstChara){
         super(player,firstChara);
         this.bannedCharacter = new Array();
     }
 
-    answer(character, nextID, nextChara){
-        this.bannedCharacter.push(character);
-        this.changeTurn(nextID, nextChara);
-    }
-
-    changeTurn(nextID, nextChara){
-        this.turn++; 
-        this.turnID = player;
-        this.turnChara = nextChara;
-    }
-
-    thisTurnID(){
-        return this.turnID;
-    }
-
-    thisTurnChara(){
-        return this.turnChara.toUpperCase();
-    }
-
-    turnCount(){
-        return this.turn;
+    checkAnswer(ans){
+        let p;
+        if (this.turnChara.length == 1) {
+            p = ans.slice(0,1).toUpperCase();
+        }else{
+            p = ans.slice(0,2).toUpperCase();
+        }
+        let isBanned = false;
+        this.bannedCharacter.forEach((val, index, arr) => {
+            if (val == ans) {
+                isBanned = true;
+            }
+        });
+        if (p == this.thisTurnChara() && !isBanned) {
+            this.bannedCharacter.push(ans);
+            return this.answer(ans);
+        }else{
+            return false;
+        }
     }
 
     banned(){
@@ -34,4 +32,4 @@ class GameAnimChara extends Game {
     }
 }
 
-export default GameAnimChara;
+module.exports = shiriChara;

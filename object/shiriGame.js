@@ -1,13 +1,13 @@
-class Game {
+class ShiriGame {
     constructor(player,firstChara){
         this.player = player;
         this.playerIndex = new Array();
         for (let i = 0; i < player.length ; i++){
-            playerIndex.push(player[i].id);
+            this.playerIndex.push(player[i].id);
         } 
         this.countAlive = player.length;
         this.grave = new Array();
-        this.turnID = player[0];
+        this.turnID = player[0].id;
         this.turnChara = firstChara;
         this.turn = 0;
     }
@@ -25,12 +25,12 @@ class Game {
     }
 
     playerDie(){
-        let index = playerIndex.indexOf(this.turnID);
+        let index = this.playerIndex.indexOf(this.turnID);
         if (index != -1) {
             this.player[index].life = 0;
             this.countAlive--;
-            this.grave.push(player[index].life);
-            return `<@${player}> has been slayed`;
+            this.grave.push(this.player[index].id);
+            this.changeTurn();
         }else{
             return "Player not found";
         }
@@ -42,31 +42,44 @@ class Game {
 
     answer(ans){
         let nextChara;
-        let lastChar = ans.charAt(-1).toLowerCase();
-        if (lastChar != "a" || lastChar != "i" || lastChar != "u" || lastChar != "e" || lastChar != "o" || lastChar == ans.charAt(-2)) {
+        let len = ans.length;
+        let lastChar = ans.charAt(len-1).toLowerCase();
+        if ((lastChar != "a" && lastChar != "i" && lastChar != "u" && lastChar != "e" && lastChar != "o") || lastChar == ans.charAt(len-2)) {
+            console.log(lastChar);
+            console.log("slice 1");
             nextChara = ans.slice(-1);
         }else{
+            console.log(lastChar);
+            console.log("slice dua");
             nextChara = ans.slice(-2);
         }
-        this.changeTurn(nextChara);
+        return this.changeTurn(nextChara.trim());
     }
 
-    checkAnswer(ans){
-        
-    }
-
-    changeTurn(nextChara){
+    changeTurn(nextChara = null){
+        if (nextChara) {
+            this.turnChara = nextChara;            
+        }
         this.turn++;
-        let index = playerIndex.indexOf(this.turnID);
-        while (player[index].life == 0) {
-            if (index == playerIndex.length - 1) {
+        let index = this.playerIndex.indexOf(this.turnID);
+        console.log("ini index sebelum "+ index);
+        let changed = true;
+        while (changed) {
+            if (index == this.playerIndex.length - 1) {
+                console.log("index jadi enol");
                 index = 0;
             }else{
+                console.log("index nambah");
                 index++;
             }
+            if (this.player[index].life != 0) {
+                changed = false;
+            }
         }
-        this.turnID = player[index].id;
-        this.turnChara = nextChara;
+        
+        this.turnID = this.player[index].id;
+        let res = "true";
+        return res;
     }
 
     thisTurnID(){
@@ -82,4 +95,4 @@ class Game {
     }
 }
 
-export default Game;
+module.exports = ShiriGame;

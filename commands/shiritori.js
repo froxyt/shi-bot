@@ -1,4 +1,4 @@
-import { shiriChara } from "../object/shiriChara";
+const shiriChara = require('../object/shiriChara');
 
 const jikanjs  = require('jikanjs'); 
 const Discord = require('discord.js');
@@ -22,11 +22,14 @@ module.exports = {
 			}		
 		}
 
-		console.log(gameStatus.status);
-
+	
 		const shiritoriDsc = new Discord.MessageEmbed().setColor('#fc77be');
 
 		if (args == "character") {
+			if (msg.gameState[msg.guild.id].status == 1) {
+				msg.channel.send('The game already started');
+				return false;
+			}
 			shiritoriDsc
 			.setTitle('Preparing anime character shiritori game')
 			.setDescription('Bot will be preparing the game for you.\nThere will be **20 second** before starting. \n\nUse **~shiritori join** to join the game, there must be 2 or more player for the game to start');
@@ -49,10 +52,11 @@ module.exports = {
 						msg.channel.send("Time is up\nLet's get started");
 						register(msg, userReact);
 					} else {
-						msg.channel.send("The number of player is not sufficient, game aborted!");
+						msg.channel.send("The number of player insufficient, game aborted!");
 					}
 				})
 				.catch(collected => {
+					console.log(collected);
 					msg.reply('Something fishy . . .');
 				});
 			});
@@ -98,34 +102,15 @@ const register = (msg, user) => {
 
 const play = (msg, participant) => {
 	msg.gameState[msg.guild.id].status = 1;
+	
 	shuffleArray(participant);
-
+	
 	const game = new shiriChara(participant, character.charAt(random(character.length, 0)));
 	
 	msg.channel.send(`<@${game.thisTurnID()}> will be the first player to answer`);
 	msg.channel.send(`"**${game.thisTurnChara()}**" will be the first letter`);
 	
-	while (game.totalAlive() > 1) {
-		console.log(game.totalAlive());
-
-	}
-	
-	let startTime = Date.now();
-
-	let reminder = setInterval(function() {
-		let timeLeft = getTimeLeft(timeout, startTime, reminder);
-		if ( timeLeft == 20 || timeLeft == 10 || timeLeft == 3 || timeLeft == 2 || timeLeft == 1) {
-			msg.channel.send(`Time left: ${getTimeLeft(timeout, startTime, reminder)}s`);
-		}
-	}, 1000);
-
-	let timeout = setTimeout(function() {
-		msg.channel.send(`<@${participant[0]}> your time is up, congratulation you lose~~`);
-	}, timeTurn);
-
-	
-
-	// msg.channel.send(`<@${}> has joined the game`);
+	rotation(msg,game);
 }
 
 function getTimeLeft(timeout, startTime, reminder) {
@@ -144,4 +129,48 @@ function shuffleArray(array) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
+}
+
+const rotation = (msg,game) => {
+	const startTime = Date.now();
+
+	const timeout = setTimeout(function() {
+		msg.channel.send(`<@${game.thisTurnID()}> your time is up, congratulation you died~~`);
+		game.playerDie();
+	}, timeTurn);
+
+
+	answerRequest(msg,game,timeout,startTime);
+}
+
+const answerRequest = (msg, game, timeout, startTime) => {
+	let timeLeft = "";
+	
+	const reminder = setInterval(function() {
+		timeLeft = getTimeLeft(timeout, startTime, reminder);
+		if ( timeLeft == 20 || timeLeft == 10 || timeLeft == 3 || timeLeft == 2 || timeLeft == 1) {
+			msg.channel.send(`Time left: ${timeLeft}s`);
+		}
+	}, 1000);
+
+	const collector = new Discord.MessageCollector(msg.channel, m => m.author.id == game.thisTurnID(), { max: 1, time: timeLeft });
+	
+	collector.on('collect', message => {
+		let res = game.checkAnswer(message.content);
+		if (res) {
+			msg.channel.send(`<@${game.thisTurnID()}>, its your turn. "**${game.thisTurnChara()}**" is the syllables`);
+			clearInterval(reminder);
+			clearTimeout(timeout);
+			rotation(msg,game);
+		}else{
+			msg.channel.send(`<@${game.thisTurnID()}>, your answer is not correct. Try Again`);
+			clearInterval(reminder);
+			answerRequest(msg,game, timeout, startTime);
+		}
+	});
+}
+
+const endGame = (msg, game) =>{	
+	msg.channel.send(`<@${game.thisTurnID()}> has win the game. Congratulation :heart::heart:`);
+	msg.gameState[msg.guild.id].status = 0;
 }
