@@ -131,12 +131,25 @@ function shuffleArray(array) {
     }
 }
 
-const rotation = (msg,game) => {
+const rotation = (msg,game, reminder = null) => {
 	const startTime = Date.now();
 
 	const timeout = setTimeout(function() {
 		msg.channel.send(`<@${game.thisTurnID()}> your time is up, congratulation you died~~`);
-		game.playerDie();
+		const end = game.playerDie();
+		console.log(end);
+		if (reminder != null) {
+			clearInterval(reminder);
+		}
+		if (!end) {
+			clearTimeout(timeout);
+			endGame(msg,game);
+		}else{
+			msg.channel.send(`<@${game.thisTurnID()}>, its your turn. "**${game.thisTurnChara()}**" is the syllables`);
+			clearTimeout(timeout);
+			rotation(msg,game,reminder);
+		}
+
 	}, timeTurn);
 
 
@@ -145,6 +158,9 @@ const rotation = (msg,game) => {
 
 const answerRequest = (msg, game, timeout, startTime) => {
 	let timeLeft = "";
+	if (reminder != null && reminder != undefined) {
+		clearInterval(reminder);
+	}
 	
 	const reminder = setInterval(function() {
 		timeLeft = getTimeLeft(timeout, startTime, reminder);
@@ -157,11 +173,12 @@ const answerRequest = (msg, game, timeout, startTime) => {
 	
 	collector.on('collect', message => {
 		let res = game.checkAnswer(message.content);
+		console.log(res);
 		if (res) {
 			msg.channel.send(`<@${game.thisTurnID()}>, its your turn. "**${game.thisTurnChara()}**" is the syllables`);
 			clearInterval(reminder);
 			clearTimeout(timeout);
-			rotation(msg,game);
+			rotation(msg,game,reminder);
 		}else{
 			msg.channel.send(`<@${game.thisTurnID()}>, your answer is not correct. Try Again`);
 			clearInterval(reminder);

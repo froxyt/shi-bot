@@ -30,7 +30,8 @@ class ShiriGame {
             this.player[index].life = 0;
             this.countAlive--;
             this.grave.push(this.player[index].id);
-			this.changeTurn();
+            const died = this.changeTurn();
+            return died;
         }else{
             return "Player not found";
         }
@@ -62,8 +63,8 @@ class ShiriGame {
         }
         this.turn++;
         let index = this.playerIndex.indexOf(this.turnID);
-        console.log("ini index sebelum "+ index);
         let changed = true;
+
         while (changed) {
             if (index == this.playerIndex.length - 1) {
                 console.log("index jadi enol");
@@ -76,9 +77,14 @@ class ShiriGame {
                 changed = false;
             }
         }
-        
+
         this.turnID = this.player[index].id;
-		let res = "true";		
+
+        if (this.countAlive == 1) {
+            return false;
+        }
+        
+        let res = "true";
         return res;
     }
 
