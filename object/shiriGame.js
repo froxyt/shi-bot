@@ -30,7 +30,7 @@ class ShiriGame {
             this.player[index].life = 0;
             this.countAlive--;
             this.grave.push(this.player[index].id);
-            this.changeTurn();
+			this.changeTurn();
         }else{
             return "Player not found";
         }
@@ -78,7 +78,7 @@ class ShiriGame {
         }
         
         this.turnID = this.player[index].id;
-        let res = "true";
+		let res = "true";		
         return res;
     }
 
