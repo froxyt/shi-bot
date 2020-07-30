@@ -1,4 +1,5 @@
 const shiriGame = require('./shiriGame');
+const search = require('../commands/search');
 
 class shiriChara extends shiriGame {
     constructor(player, firstChara){
@@ -6,7 +7,7 @@ class shiriChara extends shiriGame {
         this.bannedCharacter = new Array();
     }
 
-    checkAnswer(ans){
+    checkAnswer(ans, anime){
         let p;
         if (this.turnChara.length == 1) {
             p = ans.slice(0,1).toUpperCase();
@@ -19,6 +20,7 @@ class shiriChara extends shiriGame {
                 isBanned = true;
             }
         });
+        // search.search(ans, anime)
         if (p == this.thisTurnChara() && !isBanned) {
             this.bannedCharacter.push(ans);
             return this.answer(ans);
