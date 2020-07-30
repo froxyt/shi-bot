@@ -1,7 +1,10 @@
+const search = require('./search');
+
 const shiriChara = require('../object/shiriChara');
 
 const jikanjs  = require('jikanjs'); 
 const Discord = require('discord.js');
+const { searchAnime } = require('./search');
 
 const timePrep = 5255;
 const timeTurn = 30000;
@@ -70,6 +73,7 @@ module.exports = {
 					.setDescription('Shiritori is a Japanese word game in which the players are required to say a word which begins with the final kana of the previous word. This bot provide you with anime character and anime title shiritori. For anime character shiritori, player must answer with full character name but the first word must be given name and the final kana will be taken from the last kana of the given name.\n\nExample: sakura haruno(さくら) → ranbo (ランボ) → orihime inoue (井上) → medaka kurokami (黒神) → kanou shinka (加納) → udon (うどん)\n\n **Goal** : Stay Alive!\n\n**How to play** : \n1. There must be 2 or more player\n2. The first letter and the first player who must answer will be randomed\n3. Player must answer in 30 second, player can answer using "~<character name>"\n4. Player that not give the correct answer in time will be death, in other means the player is lose and out of the game\n5. The last player who stay alive will be the winner.\n\n**~shiritori character** : Start anime character shiritori game.\n**~shiritori anime** : Start anime title shiritori game.\n\n**~shiritori join** : Join the game that still in preparing stage. You cannot join the game that has been started.');
 
 			msg.channel.send(shiritoriDsc);
+			search.searchAnime("bleach").then(data => {console.log(data)});
 		}
 	}
 };
