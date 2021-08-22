@@ -1,9 +1,12 @@
 module.exports = {
 	name: 'hujat',
+    abbrev: 'hj',
 	description: 'Untuk Menghujat Orang!',
 	execute(msg, args) {
-		msg.channel.send("Hi, I'm here to menghujat");
 		msg.channel.send(msg.mentions.users.map(user => {
-		return `${user}'s Anjing Bangsat Bego Tll`}));	
+      if(user.id == '422428397445185551'){return `Admen ga boleh di hujat anying`}else{
+        return `${user} Anjing Bangsat Bego Tll`    
+      }
+		}));	
 	},
 };

@@ -5,22 +5,45 @@ const { prefix, token } = require('./config.json');
 const client = new Discord.Client();
 const guild = new Discord.Guild();
 client.commands = new Discord.Collection();
+client.abbrev = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 const gameState = JSON.parse(fs.readFileSync('./storages/gameState.json', 'utf8'));
+const karutaMaster = JSON.parse(fs.readFileSync('./storages/karutaMaster.json', 'utf8'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
+	client.abbrev.set(command.abbrev, command);
 }
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+	console.log(`Logged in as ${client.user.tag}!`);
+	
+	client.user.setActivity("~shiritori");
 });
 
 client.on('message', msg => {
-	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+  if (!msg.content.startsWith(prefix) || msg.author.bot){
+    if (msg.author.id == '646937666251915264'){
+      if (msg.embeds[0] != undefined){
+        if (msg.embeds[0].title == "Worker Details"){
+          client.abbrev.get('uc').execute(msg);
+        }else if(msg.embeds[0].title == 'Character Lookup'){
+          return;
+        }else{
+          return;
+        }
+      }else if(msg.content.includes("dropping") && !msg.content.includes("wait")) {
+        msg.channel.send('<@422428397445185551> ada drop gan');
+      }else{
+        return;
+      }
+    }else{
+      return;
+    }
+  }
 	
 	const sender = msg.author;
 	const senderGuild = msg.guild;
@@ -28,12 +51,18 @@ client.on('message', msg => {
 	const commandName = args.shift().toLowerCase();
 
 	msg.gameState = gameState;
+	msg.karutaMaster = karutaMaster;
 
-	if(!client.commands.has(commandName)) return;
+	if (commandName.length < 3) {
+		if(!client.abbrev.has(commandName)) return;
+	}else{
+		if(!client.commands.has(commandName)) return;
+	}
 	
-	const command = client.commands.get(commandName);
+	const command = commandName.length < 3 ? client.abbrev.get(commandName) : client.commands.get(commandName);
 	
 	try{
+		// msg.channel.send(command.description);
 		command.execute(msg,args);
 	} catch(error) {
 		console.error(error);
@@ -44,8 +73,15 @@ client.on('message', msg => {
 		if (err) {
 			console.error(err);
 		}
-	})
+	});
+
+  fs.writeFile('./storages/karutaMaster.json', JSON.stringify(msg.karutaMaster), err => {
+		if (err) {
+			console.error(err);
+		}
+	});
 	
 });
+
 
 client.login(token);

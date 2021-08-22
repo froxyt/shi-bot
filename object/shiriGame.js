@@ -42,16 +42,14 @@ class ShiriGame {
     }
 
     answer(ans){
+        const vocalREGEXP = /[aiueo].$/;
         let nextChara;
         let len = ans.length;
+        console.log(ans);
         let lastChar = ans.charAt(len-1).toLowerCase();
-        if ((lastChar != "a" && lastChar != "i" && lastChar != "u" && lastChar != "e" && lastChar != "o") || lastChar == ans.charAt(len-2)) {
-            console.log(lastChar);
-            console.log("slice 1");
+        if (vocalREGEXP.test(ans) || lastChar == ans.charAt(len-2)) {
             nextChara = ans.slice(-1);
         }else{
-            console.log(lastChar);
-            console.log("slice dua");
             nextChara = ans.slice(-2);
         }
         return this.changeTurn(nextChara.trim());
@@ -84,8 +82,7 @@ class ShiriGame {
             return false;
         }
         
-        let res = "true";
-        return res;
+        return true;
     }
 
     thisTurnID(){

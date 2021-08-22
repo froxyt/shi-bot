@@ -7,27 +7,31 @@ class shiriChara extends shiriGame {
         this.bannedCharacter = new Array();
     }
 
-    checkAnswer(ans, anime){
-        let p;
+    checkAnswer(ans){
+        const fname = ans.split(" ");
+        
+        let p, isBanned = false;
+        
         if (this.turnChara.length == 1) {
             p = ans.slice(0,1).toUpperCase();
         }else{
             p = ans.slice(0,2).toUpperCase();
         }
-        let isBanned = false;
+
         this.bannedCharacter.forEach((val, index, arr) => {
-            if (val == ans) {
+            if (val.toLowerCase() == ans.toLowerCase()) {
                 isBanned = true;
             }
         });
         // search.search(ans, anime)
         if (p == this.thisTurnChara() && !isBanned) {
             this.bannedCharacter.push(ans);
-            return this.answer(ans);
+            return this.answer(fname[0]);
         }else{
             return false;
         }
     }
+
 
     banned(){
         return this.bannedCharacter;

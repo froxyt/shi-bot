@@ -3,6 +3,7 @@ const timeTurn = 30000;
 
 module.exports = {
 	name: 'server',
+    abbrev: 'sv',
 	description: 'Let u know your server',
 	execute(msg, args) {
 		msg.channel.send("Type See or Change");
