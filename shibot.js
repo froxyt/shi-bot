@@ -37,7 +37,7 @@ client.on('message', msg => {
           return;
         }
       }else if(msg.content.includes("dropping") && !msg.content.includes("wait")) {
-        msg.channel.send('<@422428397445185551> ada drop gan');
+		client.abbrev.get('p').execute(msg);
       }else{
         return;
       }
