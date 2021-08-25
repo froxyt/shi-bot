@@ -37,7 +37,7 @@ client.on('message', msg => {
           return;
         }
       }else if(msg.content.includes("dropping") && !msg.content.includes("wait")) {
-		client.abbrev.get('p').execute(msg);
+		// client.abbrev.get('p').execute(msg);
       }else{
         return;
       }
