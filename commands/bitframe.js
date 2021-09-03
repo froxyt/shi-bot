@@ -38,7 +38,7 @@ module.exports = {
         if (bitCheck1 && bitCheck2) {
             let firstFilter = [];
             let secondFilter = []
-            let show = "```\n";
+            let show = "";
             frame.forEach(value => {
                 if (value['bit1'].toLowerCase() == bit || value['bit2'].toLowerCase() == bit) firstFilter.push(value);
             });
@@ -50,9 +50,9 @@ module.exports = {
                     const element = secondFilter[i];
                     show += `${i+1}. ${element['name']} · (${element['id']})\n`;
                 }
-                show += "```";
                 embd.setTitle(`Frame with ${bit} and ${bit2}`);
             }else{
+                show = "```\n";
                 for (let i = 0; i < firstFilter.length; i++) {
                     const element = firstFilter[i];
                     show += `${i+1}. ${element['name']} · ${element['bit1']} & ${element['bit2']} · (${element['id']}) \n`;
