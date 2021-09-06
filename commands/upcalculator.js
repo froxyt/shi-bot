@@ -5,21 +5,15 @@ module.exports = {
   abbrev: 'uc',
 	description: 'Calculator for upgrade karuta card',
 	execute(msg) {
+    let numberPattern = /\d+/g;
+
     let effChar = msg.embeds[0].description.search("Effort");
     let effValChar = effChar + 11;
 
-    let filtr = msg.embeds[0].description.slice(effValChar,effValChar+2);
-    let effVal;
-    if(filtr.charAt(1) == '*'){
-      effVal = filtr.charAt(0);
-    }else if(filtr.charAt(2) == '*'){
-      effVal = filtr.slice(0,1);
-    }else{
-      effVal = filtr;
-    }
-    
-    let numberPattern = /\d+/g;
-    
+    let filtr = msg.embeds[0].description.slice(effValChar,effValChar+4);
+    let effVal = filtr.match( numberPattern );
+    effVal = parseInt(effVal[0]);
+        
     /* Base Value */
     let baseLocate = msg.embeds[0].description.search("Base");
     let bValChar = baseLocate - 4;
@@ -393,7 +387,7 @@ module.exports = {
 
             msgEmbedEdit += `All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0034\u20E3' ){
-            mintVal = parseInt(effVal);
+            mintVal = effVal;
             mintBase = bVal;
             mintCheck = true;
           }
