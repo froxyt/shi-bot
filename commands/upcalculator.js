@@ -393,7 +393,7 @@ module.exports = {
 
             msgEmbedEdit += `All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0034\u20E3' ){
-            mintVal = effVal;
+            mintVal = parseInt(effVal);
             mintBase = bVal;
             mintCheck = true;
           }
