@@ -143,6 +143,20 @@ module.exports = {
     let vanityScale = bVal == 0 ? 0 : vanityVal / bVal; 
     let highVanityScale = bVal == 0 ? 0 : (vanityVal + 0.499) / tHighBVal; 
 
+    let addFrame = [0,0,0,0]; 
+    let addDye = [0,0,0,0];
+    let addMDye = [0,0,0,0];
+
+    for (let i = 0; i < 4; i++) {
+      addFrame[i] = Math.round(tBValUp[i] * 0.9375);
+      addDye[i] = Math.round(tBValUp[i] * 0.25);
+      addMDye[i] = Math.round(tBValUp[i] * 0.9375);
+    }
+
+    let frameChecker = false;
+    let dyeChecker = false;
+    let mDyeChecker = false;
+
     if (grabGrade == "S") {
       for (let i = 0; i < 4; i++) {
         tGrabLowVal[i] = Math.round(tLowBValUp[i] / 10);
@@ -250,12 +264,22 @@ module.exports = {
     if (styleGrade == "S") {
       let styleScale = 1.5;
 
+      frameChecker = true;
+      mDyeChecker = true;
+
       for (let i = 0; i < 4; i++) {
         tStyleLowVal[i] = Math.round(tLowBValUp[i] * styleScale);
         tStyleVal[i] = Math.round(tBValUp[i] * styleScale);
         tStyleHighVal[i] = Math.round(tHighBValUp[i] * styleScale);
       }
     }else if (styleGrade == "B") {
+      let baseFramedStyle = tHighBVal * 0.75;
+      frameChecker = true
+
+      if (styleVal > baseFramedStyle) {
+        dyeChecker = true;
+      }
+
       for (let i = 0; i < 4; i++) {
         tStyleLowVal[i] = Math.round(styleVal * 2);
         tStyleVal[i] = Math.round(styleVal * 2);
@@ -263,6 +287,8 @@ module.exports = {
       }
     }else if (styleGrade == "D") {
       let styleScale = 0.2;
+
+      dyeChecker = true;
 
       for (let i = 0; i < 4; i++) {
         tStyleLowVal[i] = Math.round(tLowBValUp[i] * styleScale);
@@ -320,6 +346,7 @@ module.exports = {
       eff[i] = Math.round(tBValUp[i] + tPurityVal[i] + tQuickVal[i] + tToughVal[i] + tVanityVal[i] + tDropVal[i] + tGrabVal[i] + tStyleVal[i] + tWellVal[i]);
       effHigh[i] = Math.round(tHighBValUp[i] + tPurityHighVal[i] + tQuickHighVal[i] + tToughHighVal[i] + tVanityHighVal[i] + tDropHighVal[i] + tGrabHighVal[i] + tStyleHighVal[i] + tWellHighVal[i]);
     }
+    /* End Calculate Kitchen */
 
 		const embd = new Discord.MessageEmbed().setColor('#91a6a6');
 
@@ -338,23 +365,80 @@ module.exports = {
 					const reaction = collected.first();
           const userReact = reaction.users.cache;
       		const embed = new Discord.MessageEmbed().setColor('#fc77be');
+          let msgEmbedEdit = "";
+          let mintVal = 0;
+          let mintBase = 0;
+          let mintCheck = false;
 
-          embed.setTitle('Character Mint Condition');
+          embed.setTitle('Character Condition');
 
-					
           if (reaction.emoji.name === '\u0030\u20E3' ){
+            mintVal = eff[3];
+            mintBase = tBValUp[3];
             
-            embed.setDescription(`All upgrade effort:\n\`\`\`Poor : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nGood : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nExcellent : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\nMint : ${effLow[3]} - ${effHigh[3]} (${eff[3]})\`\`\``);
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Poor : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nGood : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nExcellent : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\nMint : ${effLow[3]} - ${effHigh[3]} (${eff[3]})\`\`\`\n\n`;
           }else if (reaction.emoji.name === '\u0031\u20E3' ){
-            embed.setDescription(`All upgrade effort:\n\`\`\`Good : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nExcellent : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nMint : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\`\`\``);
+            mintVal = eff[2];
+            mintBase = tBValUp[2];
+            
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Good : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nExcellent : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nMint : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\`\`\`\n\n`;
           }else if (reaction.emoji.name === '\u0032\u20E3' ){
-            embed.setDescription(`All upgrade effort:\n\`\`\`Excellent : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nMint : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\`\`\``);
+            mintVal = eff[1];
+            mintBase = tBValUp[1];
+
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Excellent : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nMint : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\`\`\`\n\n`;
           }else if (reaction.emoji.name === '\u0033\u20E3' ){
-            embed.setDescription(`All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\``);
+            mintVal = eff[0];
+            mintBase = tBValUp[0];
+
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\`\n\n`;
+          }else if (reaction.emoji.name === '\u0034\u20E3' ){
+            mintVal = effVal;
+            mintBase = bVal;
+            mintCheck = true;
           }
-          if (reaction.emoji.name === '\u0034\u20E3' ){
-            embed.setDescription('**Your card is already mint**');
+
+          /* Style Kitchen */
+          let stylerMsg = "";
+          let valueMsg = "";
+          let tmpVal = mintVal - (mintBase * 0.25);
+          let styledEff = 0;
+          let dyedEff = 0;
+          let halfEff = 0;
+          let fullEff = 0;
+
+          if (frameChecker && mDyeChecker) {
+            stylerMsg += "Your Card Already Framed and Mystic Dyed";
+          }else if (frameChecker && dyeChecker) {
+            stylerMsg += "Your Card is Framed and Dyed";
+            fullEff = tmpVal + (mintBase * 0.9375);
+            valueMsg += `Mystic Dyed & Framed: ${fullEff}`
+          }else if (frameChecker) {
+            stylerMsg += "Your Card is Framed or Mystic Dyed";
+            fullEff = mintVal + (mintBase * 0.9375);
+            halfEff = mintVal + (mintBase * 0.25);
+            valueMsg += `Dyed & Framed: ${halfEff}\nMystic Dyed & Framed: ${fullEff}`
+          }else if (dyeChecker) {
+            stylerMsg += "Your Card is Dyed";
+            halfEff = mintVal + (mintBase * 0.9375);
+            dyedEff = tmpVal + (mintBase * 0.9375);
+            fullEff = dyedEff + (mintBase * 0.9375);
+            valueMsg += `Mystic Dyed: ${dyedEff}\nDyed & Framed: ${halfEff}\nMystic Dyed & Framed: ${fullEff}`
+          }else{
+            if (mintCheck) {
+              stylerMsg += "Your Card Neither Framed nor Dyed";              
+            }else{
+              stylerMsg += "Your Card Style when Mint:";
+            }
+            styledEff = mintVal + (mintBase * 0.9375);
+            dyedEff = mintVal + (mintBase * 0.25);
+            halfEff = styledEff + (mintBase * 0.25);
+            fullEff = styledEff + (mintBase * 0.9375);
+            valueMsg += `Dyed: ${dyedEff}\nFramed: ${styledEff}\nDyed & Framed: ${halfEff}\nMystic Dyed & Framed: ${fullEff}`
           }
+
+          msgEmbedEdit += `**${stylerMsg}**\n\`\`\`${valueMsg}\`\`\``;
+          embed.setDescription(msgEmbedEdit);
           embedMessage.edit(embed);
 				})
 				.catch(collected => {
