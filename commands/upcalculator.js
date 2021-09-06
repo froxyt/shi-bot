@@ -376,22 +376,22 @@ module.exports = {
             mintVal = eff[3];
             mintBase = tBValUp[3];
             
-            msgEmbedEdit += `All upgrade effort:\n\`\`\`Poor : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nGood : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nExcellent : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\nMint : ${effLow[3]} - ${effHigh[3]} (${eff[3]})\`\`\`\n\n`;
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Poor : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nGood : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nExcellent : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\nMint : ${effLow[3]} - ${effHigh[3]} (${eff[3]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0031\u20E3' ){
             mintVal = eff[2];
             mintBase = tBValUp[2];
             
-            msgEmbedEdit += `All upgrade effort:\n\`\`\`Good : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nExcellent : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nMint : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\`\`\`\n\n`;
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Good : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nExcellent : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\nMint : ${effLow[2]} - ${effHigh[2]} (${eff[2]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0032\u20E3' ){
             mintVal = eff[1];
             mintBase = tBValUp[1];
 
-            msgEmbedEdit += `All upgrade effort:\n\`\`\`Excellent : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nMint : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\`\`\`\n\n`;
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Excellent : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\nMint : ${effLow[1]} - ${effHigh[1]} (${eff[1]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0033\u20E3' ){
             mintVal = eff[0];
             mintBase = tBValUp[0];
 
-            msgEmbedEdit += `All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\`\n\n`;
+            msgEmbedEdit += `All upgrade effort:\n\`\`\`Mint : ${effLow[0]} - ${effHigh[0]} (${eff[0]})\`\`\`\n`;
           }else if (reaction.emoji.name === '\u0034\u20E3' ){
             mintVal = effVal;
             mintBase = bVal;
