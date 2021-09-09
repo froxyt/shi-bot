@@ -53,7 +53,7 @@ module.exports = {
 						charaSelected = charaGet[mCollect.first().content - 1];
 
 					}else{
-						charaSelected = isset(charaGet) ? charaGet[0] : undefined;
+						charaSelected = charaGet.length != 0 ? charaGet[0] : undefined;
 					}
 				}
 
