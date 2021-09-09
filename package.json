@@ -12,9 +12,11 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.6.0",
+    "heroku": "^7.59.0",
     "jikan-node": "^1.2.1",
     "jikanjs": "^0.7.0",
     "mal-scraper": "^2.7.1",
+    "mongoose": "^6.0.4",
     "mysql": "^2.18.1",
     "request": "^2.88.2"
   }

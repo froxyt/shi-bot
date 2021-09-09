@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Shiro",
+        "series": "No Game No Life",
+        "talk": [
+            {"q":"Skip meal", "a":"Breakfast", "edited_by": "422428397445185551"},
+            {"q":"Browse in market", "a":"Get in get out quickly", "edited_by": "422428397445185551"},
+            {"q":"Least biome would live in", "a":"Dessert", "edited_by": "422428397445185551"}
+        ],
+        "added_by": "422428397445185551",
+        "updated_by": "422428397445185551"
+    },
+    {
+        "name": "Pain",
+        "series": "Naruto Shippuden",
+        "talk": [
+            {"q":"Preferred Weather", "a":"Dry Heat", "edited_by": "422428397445185551"},
+            {"q":"Outgoing", "a":"Not Outgoing", "edited_by": "422428397445185551"},
+            {"q":"Favorite Melon","a":"Cantaloupe", "edited_by": "422428397445185551"}
+        ],
+        "added_by": "422428397445185551",
+        "updated_by": "422428397445185551"
+    },
+    {
+        "name": "Kakyoin Noriaki",
+        "series": "JoJo's Bizarre Adventure: Stardust Crusaders",
+        "talk": [
+            {"q":"What would you rather deal with","a":"Noisy Neighbour", "edited_by": "422428397445185551"},
+            {"q":"Playing sports","a":"Sounds like fun", "edited_by": "422428397445185551"}
+        ],
+        "added_by": "422428397445185551",
+        "updated_by": "422428397445185551"
+    }
+
+]

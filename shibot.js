@@ -31,8 +31,9 @@ client.on('message', msg => {
       if (msg.embeds[0] != undefined){
         if (msg.embeds[0].title == "Worker Details"){
           client.abbrev.get('uc').execute(msg);
-        }else if(msg.embeds[0].title == 'Character Lookup'){
-          return;
+        }else if(msg.embeds[0].title == 'Date Minigame'){
+			console.log(msg.embeds[0]);
+			return;
         }else{
           return;
         }
