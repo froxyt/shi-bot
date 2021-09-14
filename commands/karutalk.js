@@ -1,7 +1,5 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo');
-const frameModel = require('../db/frameSchema');
-const bitsModel = require('../db/bitsSchema');
 const charactersModel = require('../db/charactersSchema');
 
 module.exports = {

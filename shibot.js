@@ -85,4 +85,30 @@ client.on('message', msg => {
 	
 });
 
+client.on('messageUpdate', (oldMessage, newMessage) => {
+	if (newMessage.author.bot){
+		if (newMessage.author.id == '646937666251915264'){
+			if (newMessage.embeds[0] != undefined){
+				console.log(newMessage.embeds[0]);
+				if (newMessage.embeds[0].title == "Visit Character"){
+					console.log("masuk visit chara");
+					if (newMessage.embeds[0].footer !== null) {
+						if (newMessage.embeds[0].footer.text.includes('Choose the response most likely to impress')) {
+							console.log('masuk autoanswer');
+							client.abbrev.get('aa').execute(oldMessage, newMessage);
+							return;
+						}
+					}
+					if (oldMessage.embeds[0].footer !== null) {
+						if (oldMessage.embeds[0].footer.text.includes('Choose the response most likely to impress')) {
+							console.log('masuk autosavetalk');
+							client.abbrev.get('at').execute(oldMessage, newMessage);
+						}
+					}
+				}
+			}
+		}
+	}
+});
+
 client.login(process.env.TOKEN);
