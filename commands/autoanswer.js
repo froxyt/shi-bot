@@ -55,6 +55,8 @@ module.exports = {
             if (charaFind.length > 0) {
                 console.log('masuk charafind lebih dari 0');
                 let tmp = "";
+                let embed;
+
                 if (!isCode) {
                     charaFind.forEach((doc,i) => {
                         tmp += `${i+1}. ${doc.series} · **${doc.name}**\n`;
@@ -62,7 +64,7 @@ module.exports = {
     
                     embd.setDescription(`<@${v}>, please type the number beside the character for card \`${code}\` to search the question. If you didn't find the matching character type **0** \n\n**Showing characters :** \n\n ${tmp}`);
     
-                    let embed = await nMsg.channel.send(embd);
+                    embed = await nMsg.channel.send(embd);
     
                     const mCollect = await nMsg.channel.awaitMessages(m => m.author.id == v && /^\d+$/.test(m.content), { max: 1, time: 30000 });
                         
@@ -94,13 +96,21 @@ module.exports = {
                     embd.setColor('#00FF00');
                     embd.setDescription(`The answer of question “*${q}*” for ${charaSelect.series} - **${charaSelect.name}** is ${data.a} \uD83D\uDE18`);
                     embd.setFooter(`This question and answer is added by <@${data.edited_by}>`);
-                    nMsg.channel.send(embd);
+                    if (embed == undefined) {
+                        nMsg.channel.send(embd);                        
+                    }else{
+                        embed.edit(embd);
+                    }
                     mongoose.connection.close();
                     return;
                 }else{
                     embd.setColor('#FFFF00');
                     embd.setDescription(`Question “*${q}*” for ${charaSelect.series} - **${charaSelect.name}** is not found, please add this question and answer after success talking \uD83D\uDE18`);
-                    nMsg.channel.send(embd);
+                    if (embed == undefined) {
+                        nMsg.channel.send(embd);                        
+                    }else{
+                        embed.edit(embd);
+                    }
                     mongoose.connection.close();
                     return;
                 }
