@@ -64,7 +64,7 @@ client.on('message', msg => {
 	const command = commandName.length < 3 ? client.abbrev.get(commandName) : client.commands.get(commandName);
 	
 	try{
-		// msg.channel.send(command.description);
+		// msg.channel.send(command.description);1
 		command.execute(msg,args);
 	} catch(error) {
 		console.error(error);
@@ -102,7 +102,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 					if (oldMessage.embeds[0].footer !== null) {
 						if (oldMessage.embeds[0].footer.text.includes('Choose the response most likely to impress')) {
 							console.log('masuk autosavetalk');
-							client.abbrev.get('at').execute(oldMessage, newMessage);
+							client.abbrev.get('as').execute(oldMessage, newMessage);
 						}
 					}
 				}

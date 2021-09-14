@@ -5,7 +5,7 @@ const charactersModel = require('../db/charactersSchema');
 module.exports = {
 	name: 'autoanswer',
   	abbrev: 'aa',
-	description: 'Auto provide answer when talking to a character and the question is on database',
+	description: 'Auto provide answer of talking quesetion when the character and the question is available on database',
 	async execute(oMsg, nMsg) {
         try {
             const mongoose = await mongo();

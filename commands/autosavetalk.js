@@ -4,7 +4,7 @@ const charactersModel = require('../db/charactersSchema');
 
 module.exports = {
 	name: 'autosavetalk',
-  	abbrev: 'at',
+  	abbrev: 'as',
 	description: 'Auto saving talk data when successfully talking to a character',
 	async execute(oMsg, nMsg) {
         try {
