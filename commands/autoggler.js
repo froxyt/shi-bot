@@ -5,17 +5,13 @@ const notifModel = require('../db/notifSchema');
 module.exports = {
 	name: 'autoggler',
   	abbrev: 'gg',
-	description: 'Toggle on or off karuta talk auto helper',
+	description: 'Toggle on or off karuta talk auto helper (Auto save question when talk is success and Auto look for answer of the question)',
 	async execute(msg, args) {
         try {
             const mongoose = await mongo();
 
-            console.log(mongoose.connection);
-
             let findId = await notifModel.findById(msg.author.id);
-            console.log('hasil find');
-            console.log(findId);
-
+           
             if (findId == null) {
                 console.log('masuk 0');
                 let create = await notifModel.create({
@@ -24,11 +20,8 @@ module.exports = {
                     contribution: [],
                     pingDrop: [{bot: false, all:false}]
                 });
-                console.log('habis create  connection');
-                console.log(mongoose.connection);
 
                 create.save();
-                console.log('habis save');
 
                 msg.channel.send(`**Karuta talking auto helper is turned on for you,** ${msg.author}`);
             }else{

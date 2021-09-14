@@ -62,10 +62,15 @@ client.on('message', msg => {
 	}
 	
 	const command = commandName.length < 3 ? client.abbrev.get(commandName) : client.commands.get(commandName);
+
+	
 	
 	try{
-		// msg.channel.send(command.description);1
-		command.execute(msg,args);
+		if (commandName == "commands" || commandName == "c") {
+			command.execute(msg,client.abbrev);
+		}else{
+			command.execute(msg,args);
+		}
 	} catch(error) {
 		console.error(error);
 		msg.reply('There was an error trying to execute the command!');

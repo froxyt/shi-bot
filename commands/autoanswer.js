@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo');
 const charactersModel = require('../db/charactersSchema');
+const notifModel = require('../db/notifSchema');
 
 module.exports = {
 	name: 'autoanswer',
@@ -29,10 +30,15 @@ module.exports = {
             if (checkChara) chara = checkChara[1];
             if (checkCode) code = checkCode[1];
 
-            console.log(v);
+            let userOn = await notifModel.find({isAuto: true});
+            let userArr = [];
 
-            if (v != '422428397445185551' && v != '756402005593030698' && v != '423052885958590465') {
-                console.log('bukan admen');
+            userOn.forEach(user => {
+                userArr.push(user.id);
+            });
+            
+            if (!userArr.includes(v)) {
+                console.log('helper ga on');
                 mongoose.connection.close();
                 return;
             }
@@ -40,20 +46,15 @@ module.exports = {
             let charaFind = await charactersModel.find({
                 code: code
             });
-            console.log('charaFind pertama');
-            console.log(charaFind);
-
+            
             if (charaFind.length == 0) {
                 charaFind = await charactersModel.find({
                     name: chara
                 }); 
                 isCode = false;
-                console.log('charaFind kedua');
-                console.log(charaFind);
             }
 
             if (charaFind.length > 0) {
-                console.log('masuk charafind lebih dari 0');
                 let tmp = "";
                 let embed;
 

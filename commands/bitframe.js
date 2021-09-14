@@ -6,7 +6,7 @@ const bitsModel = require('../db/bitsSchema');
 module.exports = {
 	name: 'bitframe',
     abbrev: 'bf',
-	description: 'Look for frame based on bit used',
+	description: 'Look for frame based on bits used',
 	execute(msg, args) {
         mongo().then(async (mongoose) => {
             try {

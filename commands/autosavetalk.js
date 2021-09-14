@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo');
 const charactersModel = require('../db/charactersSchema');
+const notifModel = require('../db/notifSchema');
 
 module.exports = {
 	name: 'autosavetalk',
@@ -40,10 +41,15 @@ module.exports = {
             if (checkChara) chara = checkChara[1];
             if (checkCode) code = checkCode[1];
 
-            console.log(v);
+            let userOn = await notifModel.find({isAuto: true});
+            let userArr = [];
 
-            if (v != '422428397445185551' && v != '756402005593030698' && v != '423052885958590465') {
-                console.log('bukan admen');
+            userOn.forEach(user => {
+                userArr.push(user.id);
+            });
+            
+            if (!userArr.includes(v)) {
+                console.log('helper ga on');
                 mongoose.connection.close();
                 return;
             }
@@ -52,14 +58,10 @@ module.exports = {
                 name: chara
             });
 
-            console.log(charaFind);
-
             if (nMsg.embeds[0].color == 65280) {
-                console.log('masuk color ijo');
                 let desc = "";
 
                 if (charaFind.length == 0) {
-                    console.log('tambah chara');
                     desc += `**Do you want to add this character for talking purposes to the database?**\n`;
                     
                     embd.setDescription(desc);
@@ -143,30 +145,20 @@ module.exports = {
                     let coded = false;
                     let embed;
                     let tmp = "";
-                    console.log('cari code');
-
+                    
                     charaFind.forEach((doc,i) => {
                         tmp += `${i+1}. ${doc.series} · **${doc.name}**\n`;
-                        console.log('dalem foreach ke - ' + i);
-                        console.log(doc);
-                        console.log(doc.added_by);
                         if (doc.code != undefined) {
-                            console.log('dalem if doc code length > 0');
                             doc.code.forEach(val => {
-                                console.log('dalem foreach dalem');
                                 if (val = code) {
                                     coded = true;
-                                    console.log('code found');
                                     charaSelect = doc;
                                 }
                             });
                         }
                     });
 
-                    console.log('kelar foreach');
-
                     if (!coded) {
-                        console.log('tambah code');
 						embd
 						.setDescription(`<@${v}>, please type the number beside the character for card \`${code}\` to add your card to the database. \n\n**Showing characters :** \n\n ${tmp}`);
 
@@ -175,10 +167,7 @@ module.exports = {
 						const mCollect = await nMsg.channel.awaitMessages(m => m.author.id == v && /^\d+$/.test(m.content), { max: 1, time: 30000 });
 						
 						charaSelect = charaFind[mCollect.first().content - 1];
-                        // console.log(charaSelect);
-                        console.log('idnya adalah ');
-                        console.log(charaSelect.id);
-                        console.log(mongoose.Types.ObjectId(charaSelect.id));
+                        
                         let character = await charactersModel.findByIdAndUpdate(
                             mongoose.Types.ObjectId(charaSelect.id),
                         {
@@ -197,23 +186,17 @@ module.exports = {
 
                 let talkData = charaSelect.talk;
                 let qFind = false;
-                let data;
 
                 if (talkData.length != 0 ) {
                     talkData.forEach(element => {
                         if (element.q.toLowerCase() == q.toLowerCase()) {
                             qFind = true;
-                            data = element;
                         }
                     });
                 }
 
-                console.log(data);
-                console.log('mau masuk pertanyaan');
-
                 if (!qFind) {
                     desc = `**Do you want to add this question to database?**\n\n*${q}*\n\n`;
-                    console.log('masuk pertanyaan');
                     
                     if (a1 != undefined) desc += `\u0031\u20E3${a1}\n`; 
                     if (a2 != undefined) desc += `\u0032\u20E3${a2}\n`; 
@@ -282,8 +265,6 @@ module.exports = {
                             }
                         });
 
-                        console.log(character);
-
                         nMsg.channel.send(`**Question has been added for ${chara}!**`);
                             
                     }else if (reaction.emoji.name == '\u274C') {
@@ -304,7 +285,8 @@ module.exports = {
                     return;
                 }
             }else{
-                console.log('masuk color bukan ijo');
+                mongoose.connection.close();
+                return;
             }
         } catch (error) {
             
