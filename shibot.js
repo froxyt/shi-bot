@@ -22,7 +22,7 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	
-	client.user.setActivity("~shiritori");
+	client.user.setActivity("with my life, hopefully it will get better");
 });
 
 client.on('message', msg => {
